@@ -1,0 +1,104 @@
+---
+title: "Pesquisa estatística do registro civíl"
+date: "`r format(Sys.time(), '%d de %B, %Y')`"
+author: "Fábio Rocha^[Graduado em Filosofia pela UFOP; Graduando em Ciências Econômicas pela UFOP; atua na Diretoria de Estudos Econômicos da Secretaria de Desenvolvimento Econômico, Inovação e Tecnologia de Ouro Preto da Prefeitura Municipal de Ouro Preto.] | rochaviannafj@gmail.com"
+subtitle: ''
+output:
+  html_document:
+    df_print: paged
+  pdf_document:
+    includes:
+      in_header: header.tex
+fontsize: 12pt
+---
+
+
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=7, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+library(sidrar)
+library(tidyverse)
+
+
+```
+
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=7, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+divorcios <- get_sidra(api="/t/5937/n1/all/v/allxp/p/all/c274/allxt/c275/allxt/c276/allxt")
+
+```
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=7, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+divorcios_sel <- divorcios %>%
+  select(Valor,
+         Ano,
+         `Grupos de idade do marido na data da sentença`,
+         `Grupos de idade da mulher na data da sentença`,
+         `Tempo transcorrido entre as datas do casamento e da sentença`)
+
+```
+
+
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=7, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+ggplot(divorcios_sel, aes(x=Ano, y=Valor, fill = `Grupos de idade do marido na data da sentença`))+
+  geom_col(fill="royalblue")+
+  facet_wrap(~`Grupos de idade do marido na data da sentença`, ncol = 4)+
+  theme_classic()+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1))+
+  theme(legend.position = "none",
+        plot.title = ggplot2::element_text(face = "bold"),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"),
+        legend.key.size = unit(0.5, "cm"),
+        legend.title = element_blank(),
+       plot.caption = element_text(size=11))+
+  labs(x='', y='',
+    title="Divórcios concedidos no Brasil em 1ª instancia",
+    subtitle = "Idade do marido na data da sentença",
+    caption='Elaboração: Fábio Rocha | *IBGE - Pesquisa Estatísticas do Registro Civil*')
+  
+
+```
+
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=7, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+ggplot(divorcios_sel, aes(x=Ano, y=Valor))+
+  geom_col(fill = "green3")+
+  facet_wrap(~`Grupos de idade da mulher na data da sentença`, ncol = 4)+
+   theme_classic()+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1))+
+  theme(legend.position = "none",
+        plot.title = ggplot2::element_text(face = "bold"),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"),
+        legend.key.size = unit(0.5, "cm"),
+        legend.title = element_blank(),
+       plot.caption = element_text(size=11))+
+  labs(x='', y='',
+    title="Divórcios concedidos no Brasil em 1ª instancia",
+    subtitle = "Idade da mulher na data da sentença",
+    caption='Elaboração: Fábio Rocha | *IBGE - Pesquisa Estatísticas do Registro Civil*')
+
+```
+
+
+```{r, echo=F, eval=T, results='asis', fig.width=7, fig.height=10, fig.align='center', out.width=".9\\linewidth", warning=FALSE, message=FALSE, size='small'}
+
+ggplot(divorcios_sel, aes(x=Ano, y=Valor, fill = `Tempo transcorrido entre as datas do casamento e da sentença`))+
+  geom_col(fill="deepskyblue")+
+  facet_wrap(~`Tempo transcorrido entre as datas do casamento e da sentença`, ncol = 5)+
+   theme_classic()+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1))+
+  theme(legend.position = "none",
+        plot.title = ggplot2::element_text(face = "bold"),
+        plot.subtitle = ggplot2::element_text(face = "italic"),
+        legend.text = ggplot2::element_text(face = "bold"),
+        legend.key.size = unit(0.5, "cm"),
+        legend.title = element_blank(),
+       plot.caption = element_text(size=11))+
+  labs(x='', y='',
+    title="Divórcios concedidos no Brasil em 1ª instancia",
+    subtitle = "Tempo transcorrido entre as datas do casamento e da sentença",
+    caption='Elaboração: Fábio Rocha | *IBGE - Pesquisa Estatísticas do Registro Civil*')
+
+```
